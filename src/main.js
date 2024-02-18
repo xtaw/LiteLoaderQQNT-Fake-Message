@@ -1,2 +1,1 @@
-module.exports.onBrowserWindowCreated = window => {
-}
+const { ipcMain } = require("electron");
