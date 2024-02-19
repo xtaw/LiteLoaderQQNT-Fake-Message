@@ -6,3 +6,6 @@
 
 依赖：
 1. 安装 [LLAPI](https://github.com/Night-stars-1/LiteLoaderQQNT-Plugin-LLAPI) 插件
+
+已知问题：
+1. 发送的信息自己看不到，但他人能看到，自己在其他设备上也能看到
