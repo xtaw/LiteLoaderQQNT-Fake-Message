@@ -37,10 +37,10 @@
         <div style="max-height: 200px; overflow: auto;">
             <transition-group name="fake-message-list">
                 <div class="fake-message-item" v-for="(message, index) in messages" :key="message" :style="{ display: 'flex', padding: '8px 16px', width: '100%', borderRadius: '4px', marginTop: index != 0 ? '8px' : '0px', backgroundColor: selectedMessage == index ? '#E0E0E0' : '' }" @click="selectedMessage = index">
-                    <img :src="'http://q1.qlogo.cn/g?b=qq&nk=' + message['qq'] + '&s=100'" onerror="this.src = `appimg://${ LiteLoader.plugins['fake_message'].path.plugin.replace(/\\/g, '/') }/src/assets/image/default_avatar.jpg`" style="margin-top: 2px; width: 32px; height: 32px; border-radius: 50%;">
+                    <img :src="'http://q1.qlogo.cn/g?b=qq&nk=' + message['uin'] + '&s=100'" onerror="this.src = `appimg://${ LiteLoader.plugins['fake_message'].path.plugin.replace(/\\/g, '/') }/src/assets/image/default_avatar.jpg`" style="margin-top: 2px; width: 32px; height: 32px; border-radius: 50%;">
                     <div style="margin-left: 10px; display: flex; flex-direction: column; width: calc(100% - 42px);">
                         <span style="font-size: 12px; color: #999999; word-wrap: break-word; word-break: keep-all;">
-                            {{ message['qq'] }} {{ message['time'] }}
+                            {{ message['name'] }} ({{ message['uin'] }})
                         </span>
                         <span style="margin-top: 2px; font-size: 14px; word-wrap: break-word; word-break: keep-all;">
                             {{ message['content'] }}
@@ -51,16 +51,19 @@
         </div>
         <hr style="margin: 16px 0px;">
         <div style="display: flex; align-items: center;">
+            <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24">
+                <g>
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path d="M19.913 14.529a31.977 31.977 0 0 0-.675-1.886l-.91-2.246c0-.026.012-.468.012-.696C18.34 5.86 16.507 2 12 2 7.493 2 5.66 5.86 5.66 9.7c0 .229.011.671.012.697l-.91 2.246c-.248.643-.495 1.312-.675 1.886-.86 2.737-.581 3.87-.369 3.895.455.054 1.771-2.06 1.771-2.06 0 1.224.637 2.822 2.016 3.976-.515.157-1.147.399-1.554.695-.365.267-.319.54-.253.65.289.481 4.955.307 6.303.157 1.347.15 6.014.324 6.302-.158.066-.11.112-.382-.253-.649-.407-.296-1.039-.538-1.555-.696 1.379-1.153 2.016-2.751 2.016-3.976 0 0 1.316 2.115 1.771 2.06.212-.025.49-1.157-.37-3.894" />
+                </g>
+            </svg>
+            <input class="fake-message-input" style="margin-left: 10px; padding-left: 10px; width: 100%; height: 30px; border-radius: 4px; background-color: #F5F5F5;" type="number" spellcheck="false" placeholder="发送者QQ" v-model="inputUin">
+        </div>
+        <div style="display: flex; align-items: center; margin-top: 16px;">
             <svg style="width: 22px; height: 22px;" viewBox="0 0 32 32">
                 <path d="M4 28q0 0.832 0.576 1.44t1.44 0.576h20q0.8 0 1.408-0.576t0.576-1.44q0-1.44-0.672-2.912t-1.76-2.624-2.496-2.144-2.88-1.504q1.76-1.088 2.784-2.912t1.024-3.904v-1.984q0-3.328-2.336-5.664t-5.664-2.336-5.664 2.336-2.336 5.664v1.984q0 2.112 1.024 3.904t2.784 2.912q-1.504 0.544-2.88 1.504t-2.496 2.144-1.76 2.624-0.672 2.912z" />
             </svg>
-            <input class="fake-message-input" style="margin-left: 10px; padding-left: 10px; width: 100%; height: 30px; border-radius: 4px; background-color: #F5F5F5;" type="number" spellcheck="false" placeholder="发送者QQ" v-model="inputQQ">
-        </div>
-        <div style="display: flex; align-items: center; margin-top: 16px;">
-            <svg style="width: 22px; height: 22px;" viewBox="0 0 19 19">
-                <path d="M207.960546,159.843246 L210.399107,161.251151 C210.637153,161.388586 210.71416,161.70086 210.580127,161.933013 C210.442056,162.172159 210.144067,162.258604 209.899107,162.117176 L207.419233,160.68542 C207.165323,160.8826 206.846372,161 206.5,161 C205.671573,161 205,160.328427 205,159.5 C205,158.846891 205.417404,158.291271 206,158.085353 L206,153.503423 C206,153.22539 206.231934,153 206.5,153 C206.776142,153 207,153.232903 207,153.503423 L207,158.085353 C207.582596,158.291271 208,158.846891 208,159.5 C208,159.6181 207.986351,159.733013 207.960546,159.843246 Z M206.5,169 C211.746705,169 216,164.746705 216,159.5 C216,154.253295 211.746705,150 206.5,150 C201.253295,150 197,154.253295 197,159.5 C197,164.746705 201.253295,169 206.5,169 Z" transform="translate(-197 -150)"/>
-            </svg>
-            <input class="fake-message-input" style="margin-left: 10px; padding-left: 10px; width: 100%; height: 30px; border-radius: 4px; background-color: #F5F5F5;" type="datetime-local" v-model="inputTime">
+            <input class="fake-message-input" style="margin-left: 10px; padding-left: 10px; width: 100%; height: 30px; border-radius: 4px; background-color: #F5F5F5;" type="text" spellcheck="false" placeholder="显示昵称" v-model="inputName">
         </div>
         <div style="display: flex; align-items: center; margin-top: 16px;">
             <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24">
@@ -73,6 +76,6 @@
             <button class="q-button q-button--small q-button--secondary" style="width: 100%;" @click="removeMessage">删除消息</button>
             <button class="q-button q-button--small q-button--secondary" style="width: 100%;" @click="messages = []">清空消息</button>
         </div>
-        <button class="q-button q-button--small q-button--secondary" style="margin-top: 16px; width: 100%;">发送</button>
+        <button class="q-button q-button--small q-button--secondary" style="margin-top: 16px; width: 100%;" @click="sendMessage">发送</button>
 	</div>
 </div>

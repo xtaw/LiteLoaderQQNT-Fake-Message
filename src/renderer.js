@@ -4,30 +4,33 @@ document.body.insertAdjacentHTML('afterbegin', await (await fetch(`local:///${ L
 const fakeMessageWindow = document.getElementById('fake-message-window');
 const fakeMessageModal = document.getElementById('fake-message-modal');
 const fakeMessageDialog = document.getElementById('fake-message-dialog');
-fakeMessageModal.addEventListener('click', () => {
+
+function hideWindow() {
     fakeMessageWindow.style.visibility = 'hidden';
     fakeMessageModal.style.transitionDelay = '150ms';
     fakeMessageDialog.style.transitionDelay = '0ms';
     fakeMessageModal.style.opacity = 0;
     fakeMessageDialog.style.opacity = 0;
     fakeMessageDialog.style.transform = 'translate(0px, -20px)';
-});
+}
+
+fakeMessageModal.addEventListener('click', hideWindow);
 
 const app = createApp({
     setup() {
         const messages = ref([]);
         const selectedMessage = ref(-1);
-        const inputQQ = ref('');
-        const inputTime = ref('');
+        const inputUin = ref('');
+        const inputName = ref('');
         const inputContent = ref('');
 
         function addMessage() {
-			if (inputQQ.value.length == 0 || inputTime.value.length == 0 || inputContent.value.length == 0) {
+			if (inputUin.value.length == 0 || inputContent.value.length == 0) {
                 return;
             }
             messages.value.push({
-                qq: inputQQ.value,
-                time: inputTime.value,
+                uin: String(inputUin.value),
+                name: inputName.value.length == 0 ? inputUin.value : inputName.value,
                 content: inputContent.value
             });
 		}
@@ -39,8 +42,31 @@ const app = createApp({
             }
         }
 
+        async function sendMessage() {
+            if (messages.value.length > 0) {
+                fake_message.buildForwardMessage(JSON.stringify(messages.value)).then(async bytesData => {
+                    if (bytesData) {
+                        const peer = await LLAPI.getPeer();
+                        LLAPI.sendMessage(peer, [
+                            {
+                                type: 'raw',
+                                raw: {
+                                    elementId: "",
+                                    elementType: 10,
+                                    arkElement: {
+                                        bytesData: bytesData
+                                    }
+                                }
+                            }
+                        ]);
+                    }
+                });
+                hideWindow();
+            }
+        }
+
         return {
-            messages, selectedMessage, inputQQ, inputTime, inputContent, addMessage, removeMessage
+            messages, selectedMessage, inputUin, inputName, inputContent, addMessage, removeMessage, sendMessage
         }
     }
 }).mount("#fake-message-dialog");
