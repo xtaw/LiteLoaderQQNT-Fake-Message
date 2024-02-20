@@ -8,6 +8,10 @@
         background-color: #F5F5F5;
     }
 
+    .fake-message-item.fake-message-dark-mode:hover {
+        background-color: #404040;
+    }
+
     .fake-message-input:focus {
         border-radius: 4px;
         border: 1px solid #0099FF;
@@ -23,7 +27,6 @@
     .fake-message-list-leave-to {
         opacity: 0;
         transform: translateX(30px);
-        background-color: #FFFFFF !important;
     }
 
     .fake-message-list-leave-active {
@@ -36,7 +39,7 @@
 	<div id="fake-message-dialog" class="q-dialog-main" style="transform: translate(0px, -20px); opacity: 0; margin: auto 10px; transition: all 150ms ease-in; padding: 16px;">
         <div style="max-height: 200px; overflow: auto;">
             <transition-group name="fake-message-list">
-                <div class="fake-message-item" v-for="(message, index) in messages" :key="message" :style="{ display: 'flex', padding: '8px 16px', width: '100%', borderRadius: '4px', marginTop: index != 0 ? '8px' : '0px', backgroundColor: selectedMessage == index ? '#E0E0E0' : '' }" @click="selectedMessage = index">
+                <div :class="{ 'fake-message-item': true, 'fake-message-dark-mode': isDarkMode }" v-for="(message, index) in messages" :key="message" :style="{ display: 'flex', padding: '8px 16px', width: '100%', borderRadius: '4px', marginTop: index != 0 ? '8px' : '0px', backgroundColor: selectedMessage == index ? (isDarkMode ? '#282828' : '#E0E0E0') : '' }" @click="selectedMessage = index">
                     <img :src="'http://q1.qlogo.cn/g?b=qq&nk=' + message['uin'] + '&s=100'" onerror="this.src = `appimg://${ LiteLoader.plugins['fake_message'].path.plugin.replace(/\\/g, '/') }/src/assets/image/default_avatar.jpg`" style="margin-top: 2px; width: 32px; height: 32px; border-radius: 50%;">
                     <div style="margin-left: 10px; display: flex; flex-direction: column; width: calc(100% - 42px);">
                         <span style="font-size: 12px; color: #999999; word-wrap: break-word; word-break: keep-all;">
@@ -51,25 +54,22 @@
         </div>
         <hr style="margin: 16px 0px;">
         <div style="display: flex; align-items: center;">
-            <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24">
-                <g>
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path d="M19.913 14.529a31.977 31.977 0 0 0-.675-1.886l-.91-2.246c0-.026.012-.468.012-.696C18.34 5.86 16.507 2 12 2 7.493 2 5.66 5.86 5.66 9.7c0 .229.011.671.012.697l-.91 2.246c-.248.643-.495 1.312-.675 1.886-.86 2.737-.581 3.87-.369 3.895.455.054 1.771-2.06 1.771-2.06 0 1.224.637 2.822 2.016 3.976-.515.157-1.147.399-1.554.695-.365.267-.319.54-.253.65.289.481 4.955.307 6.303.157 1.347.15 6.014.324 6.302-.158.066-.11.112-.382-.253-.649-.407-.296-1.039-.538-1.555-.696 1.379-1.153 2.016-2.751 2.016-3.976 0 0 1.316 2.115 1.771 2.06.212-.025.49-1.157-.37-3.894" />
-                </g>
+            <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24" :fill="isDarkMode ? '#C1BFC0' : '#000000'">
+                <path d="M19.913 14.529a31.977 31.977 0 0 0-.675-1.886l-.91-2.246c0-.026.012-.468.012-.696C18.34 5.86 16.507 2 12 2 7.493 2 5.66 5.86 5.66 9.7c0 .229.011.671.012.697l-.91 2.246c-.248.643-.495 1.312-.675 1.886-.86 2.737-.581 3.87-.369 3.895.455.054 1.771-2.06 1.771-2.06 0 1.224.637 2.822 2.016 3.976-.515.157-1.147.399-1.554.695-.365.267-.319.54-.253.65.289.481 4.955.307 6.303.157 1.347.15 6.014.324 6.302-.158.066-.11.112-.382-.253-.649-.407-.296-1.039-.538-1.555-.696 1.379-1.153 2.016-2.751 2.016-3.976 0 0 1.316 2.115 1.771 2.06.212-.025.49-1.157-.37-3.894" />
             </svg>
-            <input class="fake-message-input" style="margin-left: 10px; padding-left: 10px; width: 100%; height: 30px; border-radius: 4px; background-color: #F5F5F5;" type="number" spellcheck="false" placeholder="发送者QQ" v-model="inputUin">
+            <input class="fake-message-input" :style="{ marginLeft: '10px', paddingLeft: '10px', width: '100%', height: '30px', borderRadius: '4px', backgroundColor: isDarkMode ? '#282828' : '#F5F5F5', color: isDarkMode ? '#FFFFFF' : '#000000' }" type="number" spellcheck="false" placeholder="发送者QQ" v-model="inputUin">
         </div>
         <div style="display: flex; align-items: center; margin-top: 16px;">
-            <svg style="width: 22px; height: 22px;" viewBox="0 0 32 32">
+            <svg style="width: 22px; height: 22px;" viewBox="0 0 32 32" :fill="isDarkMode ? '#C1BFC0' : '#000000'">
                 <path d="M4 28q0 0.832 0.576 1.44t1.44 0.576h20q0.8 0 1.408-0.576t0.576-1.44q0-1.44-0.672-2.912t-1.76-2.624-2.496-2.144-2.88-1.504q1.76-1.088 2.784-2.912t1.024-3.904v-1.984q0-3.328-2.336-5.664t-5.664-2.336-5.664 2.336-2.336 5.664v1.984q0 2.112 1.024 3.904t2.784 2.912q-1.504 0.544-2.88 1.504t-2.496 2.144-1.76 2.624-0.672 2.912z" />
             </svg>
-            <input class="fake-message-input" style="margin-left: 10px; padding-left: 10px; width: 100%; height: 30px; border-radius: 4px; background-color: #F5F5F5;" type="text" spellcheck="false" placeholder="显示昵称" v-model="inputName">
+            <input class="fake-message-input" :style="{ marginLeft: '10px', paddingLeft: '10px', width: '100%', height: '30px', borderRadius: '4px', backgroundColor: isDarkMode ? '#282828' : '#F5F5F5', color: isDarkMode ? '#FFFFFF' : '#000000' }" type="text" spellcheck="false" placeholder="显示昵称" v-model="inputName">
         </div>
         <div style="display: flex; align-items: center; margin-top: 16px;">
-            <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24">
+            <svg style="width: 22px; height: 22px;" viewBox="0 0 24 24" :fill="isDarkMode ? '#C1BFC0' : '#000000'">
                 <path d="M17 2H7C4.24 2 2 4.23 2 6.98V12.96V13.96C2 16.71 4.24 18.94 7 18.94H8.5C8.77 18.94 9.13 19.12 9.3 19.34L10.8 21.33C11.46 22.21 12.54 22.21 13.2 21.33L14.7 19.34C14.89 19.09 15.19 18.94 15.5 18.94H17C19.76 18.94 22 16.71 22 13.96V6.98C22 4.23 19.76 2 17 2ZM8 12C7.44 12 7 11.55 7 11C7 10.45 7.45 10 8 10C8.55 10 9 10.45 9 11C9 11.55 8.56 12 8 12ZM12 12C11.44 12 11 11.55 11 11C11 10.45 11.45 10 12 10C12.55 10 13 10.45 13 11C13 11.55 12.56 12 12 12ZM16 12C15.44 12 15 11.55 15 11C15 10.45 15.45 10 16 10C16.55 10 17 10.45 17 11C17 11.55 16.56 12 16 12Z" />
             </svg>
-            <input class="fake-message-input" style="margin-left: 10px; padding-left: 10px; width: 100%; height: 30px; border-radius: 4px; background-color: #F5F5F5;" type="text" spellcheck="false" placeholder="信息内容" v-model="inputContent">
+            <input class="fake-message-input" :style="{ marginLeft: '10px', paddingLeft: '10px', width: '100%', height: '30px', borderRadius: '4px', backgroundColor: isDarkMode ? '#282828' : '#F5F5F5', color: isDarkMode ? '#FFFFFF' : '#000000' }" type="text" spellcheck="false" placeholder="信息内容" v-model="inputContent">
         </div>
         <div style="display: flex; align-items: center; margin-top: 16px;">
             <button class="q-button q-button--small q-button--secondary" style="width: 100%;" @click="addMessage">添加信息</button>

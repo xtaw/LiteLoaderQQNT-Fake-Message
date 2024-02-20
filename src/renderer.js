@@ -18,6 +18,8 @@ fakeMessageModal.addEventListener('click', hideWindow);
 
 const app = createApp({
     setup() {
+        const isDarkMode = ref(document.body.getAttribute('q-theme') == 'dark');
+
         const messages = ref([]);
         const selectedMessage = ref(-1);
         const inputUin = ref('');
@@ -66,7 +68,7 @@ const app = createApp({
         }
 
         return {
-            messages, selectedMessage, inputUin, inputName, inputContent, addMessage, removeMessage, sendMessage
+            isDarkMode, messages, selectedMessage, inputUin, inputName, inputContent, addMessage, removeMessage, sendMessage
         }
     }
 }).mount("#fake-message-dialog");
@@ -92,7 +94,9 @@ const observer = new MutationObserver(mutations => {
                     funcBar.appendChild(openButton);
                 }
             });
+        } else if (mutation.type == 'attributes' && mutation.attributeName == 'q-theme') {
+            app.isDarkMode = document.body.getAttribute('q-theme') == 'dark';
         }
     });
 });
-observer.observe(document.body, { childList: true, subtree: true });
+observer.observe(document.body, { childList: true, subtree: true, attributes: true });
