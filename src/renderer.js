@@ -1,4 +1,6 @@
-const { createApp, ref } = await import('./lib/vue.js');
+import { createApp, ref } from './lib/vue.js';
+
+import { Contact, Raw } from '../LiteLoaderQQNT-Euphony/src/index.js';
 
 document.body.insertAdjacentHTML('afterbegin', await (await fetch(`local:///${ LiteLoader.plugins['fake_message'].path.plugin }/src/ui/create_window.html`)).text());
 const fakeMessageWindow = document.getElementById('fake-message-window');
@@ -48,19 +50,13 @@ const app = createApp({
             if (messages.value.length > 0) {
                 fake_message.buildForwardMessage(JSON.stringify(messages.value)).then(async bytesData => {
                     if (bytesData) {
-                        const peer = await LLAPI.getPeer();
-                        LLAPI.sendMessage(peer, [
-                            {
-                                type: 'raw',
-                                raw: {
-                                    elementId: "",
-                                    elementType: 10,
-                                    arkElement: {
-                                        bytesData: bytesData
-                                    }
-                                }
+                        Contact.getCurrentContact().sendMessage(new Raw({
+                            elementId: '',
+                            elementType: 10,
+                            arkElement: {
+                                bytesData: bytesData
                             }
-                        ]);
+                        }));
                     }
                 });
                 hideWindow();
@@ -71,7 +67,7 @@ const app = createApp({
             isDarkMode, messages, selectedMessage, inputUin, inputName, inputContent, addMessage, removeMessage, sendMessage
         }
     }
-}).mount("#fake-message-dialog");
+}).mount('#fake-message-dialog');
 
 const observer = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
