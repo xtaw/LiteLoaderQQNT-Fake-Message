@@ -4,7 +4,7 @@
     "name": "Fake Message",
     "slug": "fake_message",
     "description": "一个用于伪造转发聊天记录的插件",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "authors": [{
         "name": "xtaw",
         "link": "https://github.com/xtaw"
@@ -13,7 +13,7 @@
         "repo": "xtaw/LiteLoaderQQNT-Fake-Message",
         "branch": "master",
         "release": {
-            "tag": "1.0.1"
+            "tag": "1.0.2"
         }
     },
     "dependencies": ["euphony"],

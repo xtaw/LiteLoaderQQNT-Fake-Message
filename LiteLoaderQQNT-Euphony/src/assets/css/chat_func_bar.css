@@ -1,0 +1,14 @@
+.chat-func-bar-button {
+    display: flex;
+    margin: 0px 8px;
+    align-items: center;
+}
+
+.chat-func-bar-button-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.chat-func-bar-button-icon:hover {
+    color: #0099FF;
+}
